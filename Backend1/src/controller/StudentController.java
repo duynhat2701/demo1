@@ -9,6 +9,8 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import model.Student;
 import service.StudentService;
 
 public class StudentController {
@@ -73,7 +75,7 @@ public class StudentController {
     }
 
     private void showAll() {
-        List var10000 = this.service.getAllStudents();
+        List<Student> var10000 = this.service.getAllStudents();
         PrintStream var10001 = System.out;
         Objects.requireNonNull(var10001);
         var10000.forEach(var10001::println);
