@@ -10,37 +10,9 @@ import { NgClass, NgFor } from '@angular/common';
   imports: [
     RouterOutlet,
     HeaderLayoutComponent,
-    FormsModule,
-    CurrencyPipe,
-    NgFor ,
-    NgClass
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  isActive =true;
-
-  products = [
-    {
-      name: 'tra sua',
-      price: 40000,
-      image: 'assets/images/tra sua.jpg',
-    },
-    {
-      name: 'hgret',
-      price: 30000,
-      image: 'assets/images/tra sua.jpg',
-    },
-    {
-      name: 'tfff',
-      price: 70000,
-      image: 'assets/images/tra sua.jpg',
-    },
-    {
-      name: 'tbbbb',
-      price: 40000,
-      image: 'assets/images/tra sua.jpg',
-    },
-  ];
 }
