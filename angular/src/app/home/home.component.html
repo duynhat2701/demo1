@@ -24,7 +24,11 @@
         <div class="col-3">{{ product.price | currencyPipe }}</div>
         <div class="col-4">
           <div class="action-group">
-            <button type="button" class="btn-main action-button edit-link" (click)="openEditModal(product)">Sua</button>
+            <button type="button" class="btn-main action-button edit-link" (click)="openEditModal(product)">
+              <img width="20px" height="auto"
+                   src="assets/images/arrow-rotate-right-solid.png"
+                   alt="Update">
+            </button>
             <button type="button" class="btn-main action-button" (click)="deleteProduct(product.id)">
               <img width="20px" height="auto"
                    src="assets/images/trash-can-solid.png"
@@ -70,16 +74,14 @@
         </label>
 
         <label>
-          <span>Duong dan hinh anh</span>
+          <span>Hinh Anh San Pham</span>
           <input
-            type="text"
-            name="image"
-            [(ngModel)]="productForm.image"
-            required
-            placeholder="assets/images/tra sua.jpg"
+            type="file"
+            name="imageFile"
+            accept="image/*"
+            (change)="onImageSelected($event)"
           />
         </label>
-
         <div class="preview-box" *ngIf="productForm.image">
           <span>Xem truoc</span>
           <img [src]="productForm.image" [alt]="productForm.name || 'product preview'" />
@@ -95,4 +97,3 @@
     </div>
   </div>
 </div>
-

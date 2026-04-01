@@ -1,13 +1,13 @@
 
 .wrapper-cart {
-  background-image: linear-gradient(to right, #d434b0, #8029fc);
+  background-image: linear-gradient(to right, #ffffff );
   min-height: calc(100vh - 70px);
   padding-bottom: 2rem;
 }
 
 .group-cart{
   width: 75%;
-  background: #ffffff;
+  background: #ede9e9;
   margin: auto;
   padding: 2rem;
   border-radius: 4px;
@@ -140,6 +140,10 @@
   font-size: 1rem;
 }
 
+.product-form input[type='file'] {
+  padding: 0.2rem;
+}
+
 .preview-box {
   display: flex;
   flex-direction: column;
@@ -167,7 +171,6 @@
   cursor: pointer;
   font: inherit;
 }
-
 .error-message {
   color: #c62828;
   font-weight: 600;

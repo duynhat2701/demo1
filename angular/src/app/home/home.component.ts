@@ -14,7 +14,6 @@ import { ProductService } from '../products/product.service';
 })
 export class HomeComponent {
   private readonly productService = inject(ProductService);
-  private readonly defaultImage = 'assets/images/tra sua.jpg';
 
   products: Product[] = [];
   isModalOpen = false;
@@ -57,7 +56,7 @@ export class HomeComponent {
 
   protected submitForm(): void {
     if (!this.productForm.name.trim() || this.productForm.price <= 0 || !this.productForm.image.trim()) {
-      this.errorMessage = 'Vui long nhap day du ten, gia va hinh anh hop le.';
+      this.errorMessage = 'Vui long nhap day du ten, gia va chon hinh anh hop le.';
       return;
     }
 
@@ -87,11 +86,52 @@ export class HomeComponent {
     this.loadProducts();
   }
 
+  protected onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.errorMessage = 'Chi duoc chon file hinh anh.';
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const result = reader.result;
+
+      if (typeof result !== 'string') {
+        this.errorMessage = 'Doc file hinh anh that bai.';
+        return;
+      }
+
+      this.productForm.image = result;
+      this.errorMessage = '';
+    };
+
+
+    reader.onerror = () => {
+      this.errorMessage = 'Doc file hinh anh that bai.';
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  protected clearSelectedImage(): void {
+    this.productForm.image = '';
+    this.errorMessage = '';
+  }
+
   private createEmptyForm(): ProductPayload {
     return {
       name: '',
       price: 0,
-      image: this.defaultImage,
+      image: '',
     };
   }
 

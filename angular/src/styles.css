@@ -8,13 +8,13 @@ body {
 h1 {
   padding: 3rem 0;
   margin: 0;
-  color: white;
+  color: black;
   text-transform: uppercase;
   text-align: center;
 }
 
 .btn-main {
-  background-image: linear-gradient(to right, #d434b0, #8029fc);
+  background-image: linear-gradient(to right, #736f6f);
   padding: 0.5rem;
   display: flex;
   justify-content: center;
