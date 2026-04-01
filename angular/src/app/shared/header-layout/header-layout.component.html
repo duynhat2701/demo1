@@ -1,11 +1,12 @@
 <div class="group-header">
   <div class="header-logo">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 982 239"
-      fill="none"
-      class="angular-logo"
-    >
+    <a routerLink="/">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 982 239"
+        fill="none"
+        class="angular-logo"
+      >
       <g clip-path="url(#a)">
         <path
           fill="url(#b)"
@@ -47,9 +48,14 @@
         </clipPath>
       </defs>
     </svg>
+    </a>
   </div>
   <div class="group-navigation">
-    <div class="btn-navigation"><img src = "assets/images/cart-arrow-down-solid.png" alt="Shopping" width="20px" height="20px" ></div>
-    <div class="btn-navigation"><img src = "assets/images/store-solid.png" alt="Shopping" width="20px" height="20px" ></div>
+    <a routerLink="/" class="btn-navigation">
+      <img src="assets/images/cart-arrow-down-solid.png" alt="Shopping" width="20" height="20" />
+    </a>
+    <a routerLink="/" class="btn-navigation">
+      <img src="assets/images/store-solid.png" alt="Store" width="20" height="20" />
+    </a>
   </div>
 </div>

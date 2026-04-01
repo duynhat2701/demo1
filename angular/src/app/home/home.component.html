@@ -1,7 +1,11 @@
 <div class="wrapper-cart">
-  <h1 [ngClass]="{'active': isActive}">Shopping Cart</h1>
+  <h1>Shopping Cart</h1>
 
   <div class="group-cart">
+    <div class="cart-toolbar">
+      <button type="button" class="btn-main action-button" (click)="openCreateModal()">Them san pham</button>
+    </div>
+
     <div class="header-cart">
       <div class="col-1">Image</div>
       <div class="col-2">Name</div>
@@ -9,22 +13,85 @@
       <div class="col-4">Action</div>
     </div>
     <div class="body-cart">
+      <p class="empty-state" *ngIf="products.length === 0">Chua co san pham nao.</p>
       <div class="row-cart" *ngFor="let product of products">
         <div class="col-1">
-          <img width="50px" height="auto"
-               src="{{product.image}}"
-               alt="Trasua">
+          <a [routerLink]="['/detail', product.id]">
+            <img width="50" [src]="product.image" [alt]="product.name" />
+          </a>
         </div>
         <div class="col-2">{{ product.name }}</div>
         <div class="col-3">{{ product.price | currencyPipe }}</div>
         <div class="col-4">
-          <div class="btn-main">
-            <img width="20px" height="auto"
-                 src="assets/images/trash-can-solid.png"
-                 alt="Delete">
+          <div class="action-group">
+            <button type="button" class="btn-main action-button edit-link" (click)="openEditModal(product)">Sua</button>
+            <button type="button" class="btn-main action-button" (click)="deleteProduct(product.id)">
+              <img width="20px" height="auto"
+                   src="assets/images/trash-can-solid.png"
+                   alt="Delete">
+            </button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ isEditMode ? 'Cap nhat san pham' : 'Them san pham' }}</h2>
+        <button type="button" class="modal-close" (click)="closeModal()">X</button>
+      </div>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <form #productNgForm="ngForm" (ngSubmit)="submitForm()" class="product-form">
+        <label>
+          <span>Ten san pham</span>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="productForm.name"
+            required
+            placeholder="Nhap ten san pham"
+          />
+        </label>
+
+        <label>
+          <span>Gia</span>
+          <input
+            type="number"
+            name="price"
+            [(ngModel)]="productForm.price"
+            min="1"
+            required
+            placeholder="Nhap gia"
+          />
+        </label>
+
+        <label>
+          <span>Duong dan hinh anh</span>
+          <input
+            type="text"
+            name="image"
+            [(ngModel)]="productForm.image"
+            required
+            placeholder="assets/images/tra sua.jpg"
+          />
+        </label>
+
+        <div class="preview-box" *ngIf="productForm.image">
+          <span>Xem truoc</span>
+          <img [src]="productForm.image" [alt]="productForm.name || 'product preview'" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeModal()">Huy</button>
+          <button type="submit" class="btn-main action-button" [disabled]="productNgForm.invalid">
+            {{ isEditMode ? 'Luu thay doi' : 'Tao san pham' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
