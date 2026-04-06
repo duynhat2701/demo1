@@ -15,8 +15,18 @@
 
 .cart-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.search-input {
+  width: min(320px, 100%);
+  padding: 0.75rem 1rem;
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
 .header-cart {

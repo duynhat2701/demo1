@@ -1,6 +1,13 @@
 <div class="detail-page">
+  <div class="detail-card" *ngIf="isLoading">
+    <div class="detail-content">
+      <p class="detail-label">Chi tiet san pham</p>
+      <h2>Dang tai...</h2>
+    </div>
+  </div>
+
   <div class="detail-card" *ngIf="product; else notFound">
-    <img [src]="product.image" [alt]="product.name" class="detail-image" />
+    <img [src]="product.imageUrl" [alt]="product.name" class="detail-image" />
     <div class="detail-content">
       <p class="detail-label">Chi tiet san pham</p>
       <h2>{{ product.name }}</h2>
@@ -12,10 +19,10 @@
   </div>
 
   <ng-template #notFound>
-    <div class="detail-card">
+    <div class="detail-card" *ngIf="!isLoading">
       <div class="detail-content">
         <p class="detail-label">Chi tiet san pham</p>
-        <h2>Khong tim thay san pham</h2>
+        <h2>{{ errorMessage || 'Khong tim thay san pham' }}</h2>
         <a routerLink="/" class="btn-main detail-link">Ve trang chu</a>
       </div>
     </div>

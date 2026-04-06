@@ -2,7 +2,10 @@ export interface Product {
   id: number;
   name: string;
   price: number;
-  image: string;
+  imageUrl: string;
 }
 
-export type ProductPayload = Omit<Product, 'id'>;
+export interface ProductFormValue {
+  name: string;
+  price: number;
+}

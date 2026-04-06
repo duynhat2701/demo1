@@ -3,8 +3,19 @@
 
   <div class="group-cart">
     <div class="cart-toolbar">
-      <button type="button" class="btn-main action-button" (click)="openCreateModal()">Them san pham</button>
+      <input
+        type="search"
+        name="search"
+        [(ngModel)]="searchTerm"
+        class="search-input"
+        placeholder="Tim theo ten san pham"
+      />
+      <button type="button" class="btn-main action-button" (click)="openCreateModal()" [disabled]="isLoading">
+        Them san pham
+      </button>
     </div>
+    <p class="error-message" *ngIf="pageErrorMessage">{{ pageErrorMessage }}</p>
+    <p class="empty-state" *ngIf="isLoading">Dang tai du lieu...</p>
 
     <div class="header-cart">
       <div class="col-1">Image</div>
@@ -13,11 +24,14 @@
       <div class="col-4">Action</div>
     </div>
     <div class="body-cart">
-      <p class="empty-state" *ngIf="products.length === 0">Chua co san pham nao.</p>
-      <div class="row-cart" *ngFor="let product of products">
+      <p class="empty-state" *ngIf="!isLoading && products.length === 0">Chua co san pham nao.</p>
+      <p class="empty-state" *ngIf="!isLoading && products.length > 0 && filteredProducts.length === 0">
+        Khong tim thay san pham phu hop.
+      </p>
+      <div class="row-cart" *ngFor="let product of filteredProducts">
         <div class="col-1">
           <a [routerLink]="['/detail', product.id]">
-            <img width="50" [src]="product.image" [alt]="product.name" />
+            <img width="50" [src]="product.imageUrl" [alt]="product.name" />
           </a>
         </div>
         <div class="col-2">{{ product.name }}</div>
@@ -82,15 +96,15 @@
             (change)="onImageSelected($event)"
           />
         </label>
-        <div class="preview-box" *ngIf="productForm.image">
+        <div class="preview-box" *ngIf="displayImageUrl">
           <span>Xem truoc</span>
-          <img [src]="productForm.image" [alt]="productForm.name || 'product preview'" />
+          <img [src]="displayImageUrl" [alt]="productForm.name || 'product preview'" />
         </div>
 
         <div class="modal-actions">
           <button type="button" class="secondary-button" (click)="closeModal()">Huy</button>
-          <button type="submit" class="btn-main action-button" [disabled]="productNgForm.invalid">
-            {{ isEditMode ? 'Luu thay doi' : 'Tao san pham' }}
+          <button type="submit" class="btn-main action-button" [disabled]="productNgForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'Dang xu ly...' : (isEditMode ? 'Luu thay doi' : 'Tao san pham') }}
           </button>
         </div>
       </form>

@@ -1,122 +1,32 @@
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Product, ProductPayload } from './product.model';
-
-const STORAGE_KEY = 'products';
-
-const DEFAULT_PRODUCTS: Product[] = [
-  {
-    id: 1,
-    name: 'Tra sua truyen thong',
-    price: 40000,
-    image: 'assets/images/tra sua.jpg',
-  },
-  {
-    id: 2,
-    name: 'Tra sua matcha',
-    price: 30000,
-    image: 'assets/images/tra sua.jpg',
-  },
-  {
-    id: 3,
-    name: 'Tra sua socola',
-    price: 70000,
-    image: 'assets/images/tra sua.jpg',
-  },
-  {
-    id: 4,
-    name: 'Tra sua duong den',
-    price: 45000,
-    image: 'assets/images/tra sua.jpg',
-  },
-];
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Product } from './product.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private readonly platformId = inject(PLATFORM_ID);
-  private products: Product[] = this.loadProducts();
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:8080/products';
 
-  getProducts(): Product[] {
-    return [...this.products];
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
   }
 
-  getProductById(id: number): Product | undefined {
-    return this.products.find((product) => product.id === id);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  createProduct(payload: ProductPayload): Product {
-    const newProduct: Product = {
-      id: this.getNextId(),
-      ...payload,
-    };
-
-    this.products = [...this.products, newProduct];
-    this.persistProducts();
-    return newProduct;
+  createProduct(payload: FormData): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, payload);
   }
 
-  updateProduct(id: number, payload: ProductPayload): Product | undefined {
-    const existingProduct = this.getProductById(id);
-
-    if (!existingProduct) {
-      return undefined;
-    }
-
-    const updatedProduct: Product = {
-      ...existingProduct,
-      ...payload,
-      id,
-    };
-
-    this.products = this.products.map((product) =>
-      product.id === id ? updatedProduct : product,
-    );
-    this.persistProducts();
-    return updatedProduct;
+  updateProduct(id: number, payload: FormData): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, payload);
   }
 
-  deleteProduct(id: number): void {
-    this.products = this.products.filter((product) => product.id !== id);
-    this.persistProducts();
-  }
-
-  private getNextId(): number {
-    return this.products.reduce((maxId, product) => Math.max(maxId, product.id), 0) + 1;
-  }
-
-  private loadProducts(): Product[] {
-    if (!isPlatformBrowser(this.platformId)) {
-      return DEFAULT_PRODUCTS;
-    }
-
-    const rawProducts = localStorage.getItem(STORAGE_KEY);
-
-    if (!rawProducts) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
-      return DEFAULT_PRODUCTS;
-    }
-
-    try {
-      const parsedProducts = JSON.parse(rawProducts) as Product[];
-      if (Array.isArray(parsedProducts) && parsedProducts.length > 0) {
-        return parsedProducts;
-      }
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
-      return DEFAULT_PRODUCTS;
-    } catch {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
-      return DEFAULT_PRODUCTS;
-    }
-  }
-
-  private persistProducts(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.products));
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
